@@ -9,11 +9,13 @@ class ChoiceInline(admin.TabularInline):
 
 
 class PollAdmin(admin.ModelAdmin):
-    fields = [(None,               {'fields': ['question']}),
+    fieldsets = [(None,               {'fields': ['question']}),
               ('Date information', {'fields': ['pub_date'], 'classes': ['collapse']}),
               ]
-    inlines = ChoiceInline
-    list_display = ('question', 'pub_date')
+    inlines = [ChoiceInline]
+    list_display = ('question', 'pub_date', 'was_published_recently')
+    list_filter = ['pub_date']
+    search_fields = ['question']
 
 
 admin.site.register(Poll, PollAdmin)
