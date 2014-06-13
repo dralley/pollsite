@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html>
+    <head>
+        <title>Pollsite - {% block title %} Index {% endblock %} </title>
+
+    </head>
+    <body>
+        {% if user.is_authenticated %}
+            <li><a href="/rango/profile/">View Profile</a></li>
+            <li><a href="/rango/logout/">Logout</a></li>
+        {% else %}
+            <li><a href="/rango/register/">Register</a></li>
+            <li><a href="/rango/login/">Login</a></li>
+        {% endif %}
+    </body>
+
+</html>
