@@ -3,17 +3,31 @@
 
 <html>
     <head>
-        <title>Pollsite - {% block title %} Index {% endblock %} </title>
-
+        <title>Pollsite - {% block title %} Index {% endblock %}</title>
     </head>
     <body>
-        {% if user.is_authenticated %}
-            <li><a href="/rango/profile/">View Profile</a></li>
-            <li><a href="/rango/logout/">Logout</a></li>
-        {% else %}
-            <li><a href="/rango/register/">Register</a></li>
-            <li><a href="/rango/login/">Login</a></li>
-        {% endif %}
-    </body>
 
+        <div>
+        {% block body_block %}{% endblock %}
+        </div>
+
+        <br/>
+
+        <div>
+            {% if user.is_authenticated %}
+            <p>You are currently logged in as {{ user.username }}</p>
+            <ul>
+                <li><a href='{% url 'polls:profile' %}'>Profile</a></li>
+                <li><a href='{% url 'polls:logout' %}'>Logout</a></li>
+            </ul>
+            {% else %}
+            <p>You are not currently logged in.  In order to create or vote on polls, you must log in or create an account</p>
+            <ul>
+                <li><a href='{% url 'polls:register' %}'>Register</a></li>
+                <li><a href='{% url 'polls:login' %}'>Login</a></li>
+            </ul>
+            {% endif %}
+        </div>
+
+    </body>
 </html>
