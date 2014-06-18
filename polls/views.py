@@ -6,7 +6,7 @@ from django.utils import timezone
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from polls.models import Poll, Choice
+from polls.models import Poll, Choice, Vote
 from polls.forms import UserForm
 
 
@@ -53,6 +53,7 @@ class ProfileView(generic.DetailView):
 #     return render(request, 'polls/results.html', {'poll': poll})
 
 
+@login_required
 def vote(request, poll_id):
     p = get_object_or_404(Poll, pk=poll_id)
     try:
@@ -60,9 +61,14 @@ def vote(request, poll_id):
     except (KeyError, Choice.DoesNotExist):
         return render(request, 'polls/detail.html', {'poll': p, 'error_message': "You didn't select a choice"})
     else:
-        selected_choice.votes += 1
-        selected_choice.save()
-        return redirect(reverse('polls:results', args=(p.id,)))
+        if request.user.vote_set.filter(choice__poll=p).exists():
+            return render(request, 'polls/detail.html', {'poll': p, 'error_message': "You have already voted on this poll"})
+        else:
+            v = Vote()
+            v.choice = selected_choice
+            v.user = request.user
+            v.save()
+            return redirect(reverse('polls:results', args=(p.id,)))
 
 
 def user_login(request):
