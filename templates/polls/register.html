@@ -3,12 +3,12 @@
 
 {% block body_block %}
     {% if registered %}
-        <strong>thank you for registering!</strong>
+        <strong>Thank you for registering!</strong>
         <a href="/polls">Return to the homepage.</a><br />
     {% else %}
     <strong>register here!</strong><br />
 
-    <form id="user_form" method="post" action="/polls/register/"
+    <form id="user_form" method="post" action=""
             enctype="multipart/form-data">
 
         {% csrf_token %}

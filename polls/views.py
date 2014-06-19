@@ -1,11 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse, HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.views import generic
 from django.utils import timezone
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, AnonymousUser
 from polls.models import Poll, Choice, Vote
 from polls.forms import UserForm
 
@@ -18,19 +17,50 @@ class IndexView(generic.ListView):
         return Poll.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:5]
 
 
-class DetailView(generic.DetailView):
+class PollDetailView(generic.DetailView):
     model = Poll
     template_name = 'polls/detail.html'
+
+    def get(self, request, pk, *args, **kwargs):
+        p = get_object_or_404(Poll, pk=pk)
+
+        if isinstance(request.user, AnonymousUser):
+            return render(request, 'polls/detail.html', {'poll': p, 'error_message': "You are not logged in"})
+
+        if request.user.vote_set.filter(choice__poll=p).exists():
+            return redirect(reverse('polls:results', args=(p.id,)))
+
+        return super(PollDetailView, self).get(request, pk, *args, **kwargs)
 
 
 class ResultsView(generic.DetailView):
     model = Poll
     template_name = 'polls/results.html'
 
+    def get(self, request, pk, *args, **kwargs):
+        self.prev_choice = None
+
+        if not isinstance(request.user, AnonymousUser):
+            p = get_object_or_404(Poll, pk=pk)
+            if request.user.vote_set.filter(choice__poll=p).exists():
+                self.prev_choice = request.user.vote_set.filter(choice__poll=p)[0].choice
+
+        return super(ResultsView, self).get(request, pk, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(ResultsView, self).get_context_data(**kwargs)
+        context.update({'prev_choice': self.prev_choice})
+        return context
+
 
 class ProfileView(generic.DetailView):
     model = User
     template_name = 'polls/profile.html'
+
+
+class CreatePage(generic.DetailView):
+    model = Poll
+    template_name = 'polls/create_poll.html'
 
 
 # class VoteView(generic.ListView):
@@ -53,22 +83,23 @@ class ProfileView(generic.DetailView):
 #     return render(request, 'polls/results.html', {'poll': poll})
 
 
-@login_required
 def vote(request, poll_id):
     p = get_object_or_404(Poll, pk=poll_id)
+    user = request.user
+
     try:
         selected_choice = p.choice_set.get(pk=request.POST['choice'])
     except (KeyError, Choice.DoesNotExist):
         return render(request, 'polls/detail.html', {'poll': p, 'error_message': "You didn't select a choice"})
     else:
-        if request.user.vote_set.filter(choice__poll=p).exists():
-            return render(request, 'polls/detail.html', {'poll': p, 'error_message': "You have already voted on this poll"})
-        else:
+        if not isinstance(user, AnonymousUser) and user.is_active:
             v = Vote()
             v.choice = selected_choice
-            v.user = request.user
+            v.user = user
             v.save()
             return redirect(reverse('polls:results', args=(p.id,)))
+        else:
+            return render(request, 'polls/detail.html', {'poll': p, 'error_message': "You are not logged in"})
 
 
 def user_login(request):
@@ -110,6 +141,7 @@ def register(request):
             user = user_form.save()
             user.set_password(user.password)
             user.save()
+            return redirect(reverse('polls:index'))
         else:
             print user_form.errors
     else:

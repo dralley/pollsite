@@ -11,8 +11,8 @@ class UserForm(forms.ModelForm):
         fields = ('username', 'email', 'password')
 
 
-# class PollForm(forms.ModelForm):
+class PollForm(forms.ModelForm):
 
-#     class Meta:
-#         model = models.Poll
-#         fields = ('question')
+    class Meta:
+        model = models.Poll
+        fields = ('question')
