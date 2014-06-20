@@ -14,6 +14,10 @@ class Poll(models.Model):
         now = timezone.now()
         return now - datetime.timedelta(days=1) < self.pub_date < now
 
+    def get_absolute_url(self):
+        from django.core.urlresolvers import reverse
+        return reverse('polls:detail', args=[str(self.id)])
+
     def __unicode__(self):
         return self.question
 

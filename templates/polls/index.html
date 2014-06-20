@@ -14,4 +14,8 @@
     {% else %}
         <p>No polls are available.</p>
     {% endif %}
+
+    {% if user.is_authenticated %}
+        <a href={% url 'polls:new_poll' %}>Create a new poll</a>
+    {% endif %}
 {% endblock %}

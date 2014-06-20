@@ -6,7 +6,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User, AnonymousUser
 from polls.models import Poll, Choice, Vote
-from polls.forms import UserForm
+from polls.forms import UserForm, PollForm
 
 
 class IndexView(generic.ListView):
@@ -58,29 +58,19 @@ class ProfileView(generic.DetailView):
     template_name = 'polls/profile.html'
 
 
-class CreatePage(generic.DetailView):
+class CreatePoll(generic.CreateView):
     model = Poll
     template_name = 'polls/create_poll.html'
+    form_class = PollForm
 
-
-# class VoteView(generic.ListView):
-#     model = Poll
-
-
-# def index(request):
-#     latest_poll_list = Poll.objects.order_by('-pub_date')[:5]
-#     context = {'latest_poll_list': latest_poll_list}
-#     return render(request, 'polls/index.html', context)
-
-
-# def detail(request, poll_id):
-#     poll = get_object_or_404(Poll, pk=poll_id)
-#     return render(request, 'polls/detail.html', {'poll': poll})
-
-
-# def results(request, poll_id):
-#     poll = get_object_or_404(Poll, pk=poll_id)
-#     return render(request, 'polls/results.html', {'poll': poll})
+    def get_initial(self):
+        initial = super(CreatePoll, self).get_initial()
+        author = self.request.user
+        initial.update({
+            'author': author,
+            'pub_date': timezone.now()
+        })
+        return initial
 
 
 def vote(request, poll_id):
