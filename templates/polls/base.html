@@ -3,34 +3,69 @@
 
 <html>
     <head>
-
-
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Bootstrap -->
+        <link href="{% static 'css/bootstrap-fluid-adj.css' %}" rel="stylesheet">
+        <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" media="screen">
+        <link href="{% static 'css/bootstrap-responsive.css' %}" rel="stylesheet">
 
         <title>Pollsite - {% block title %} Index {% endblock %}</title>
     </head>
+
     <body>
+        <div class="navbar navbar-inverse navbar-fixed-top">
+           <div class="navbar-inner">
+               <div class="container">
+                   <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                       <span class="icon-bar"></span>
+                       <span class="icon-bar"></span>
+                       <span class="icon-bar"></span>
+                   </button>
+                   <a class="brand" href={% url 'polls:index' %}>Pollsite</a>
 
-        <div>
-        {% block body_block %}{% endblock %}
+                   <div class="nav-collapse collapse">
+                       <ul class="nav pull-right">
+                            {% if user.is_authenticated %}
+                                <li class="navbar-text">Welcome, {{ user.username }}!</li>
+                                <li><a href={% url 'polls:logout' %}>Logout</a></li>
+                           {% else %}
+                                <li><a href={% url 'polls:register' %}>Register</a></li>
+                                <li><a href={% url 'polls:login' %}>Login</a></li>
+                           {% endif %}
+                       </ul>
+                       <ul class="nav">
+                           {% if user.is_authenticated %}
+                                <li><a href={% url 'polls:new_poll' %}>Create poll</a></li>
+                           {% endif %}
+                       </ul>
+                    </div>
+                   <!--/.nav-collapse -->
+               </div>
+           </div>
         </div>
 
-        <br/>
-
-        <div>
-            {% if user.is_authenticated %}
-            <p>You are currently logged in as {{ user.username }}</p>
-            <ul>
-                <li><a href='{% url 'polls:profile' %}'>Profile</a></li>
-                <li><a href='{% url 'polls:logout' %}'>Logout</a></li>
-            </ul>
-            {% else %}
-            <p>You are not currently logged in.  In order to create or vote on polls, you must log in or create an account</p>
-            <ul>
-                <li><a href='{% url 'polls:register' %}'>Register</a></li>
-                <li><a href='{% url 'polls:login' %}'>Login</a></li>
-            </ul>
-            {% endif %}
+        <div class="container">
+            <div class="row-fluid">
+                <div class="span3">
+                    <div class="well sidebar-nav">
+                        <!--- Empty for the timebeing -->
+                    </div>
+                    <!--/.well -->
+                </div>
+                <!--/span-->
+                <div class="span9">
+                    {% block body_block %}
+                    {% endblock %}
+                </div>
+                <!--/span-->
+            </div>
+            <!--/row-->
         </div>
+        <!--/.fluid-container-->
 
+        <hr>
+
+    <script src="{% static 'js/jquery-2.1.1.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
     </body>
 </html>

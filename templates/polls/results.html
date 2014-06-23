@@ -12,4 +12,6 @@
             <li>{{ choice.choice_text }} -- {{ choice.vote_set.count }} vote{{ choice.votes|pluralize}}</li>
         {% endfor %}
     </ul>
+
+    <a href={% url 'polls:index' %}>Back to index</a>
 {% endblock %}

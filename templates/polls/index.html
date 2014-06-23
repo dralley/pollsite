@@ -1,9 +1,8 @@
 {% extends 'polls/base.html' %}
-
 {% load static %}
-<link rel='stylesheet' type='text/css' href="{% static 'css/style.css' %}" />
 
 {% block body_block %}
+<div class="hero-unit">
     <h3>Latest Polls</h3>
     {% if latest_poll_list %}
         <ul>
@@ -18,4 +17,5 @@
     {% if user.is_authenticated %}
         <a href={% url 'polls:new_poll' %}>Create a new poll</a>
     {% endif %}
+</div>
 {% endblock %}
