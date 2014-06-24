@@ -39,9 +39,10 @@ class ResultsView(generic.DetailView):
 
     def get(self, request, pk, *args, **kwargs):
         self.prev_choice = None
+        p = get_object_or_404(Poll, pk=pk)
+        self.vote_counts = {k.choice_text: k.vote_set.count() for k in p.choice_set.all()}
 
         if not isinstance(request.user, AnonymousUser):
-            p = get_object_or_404(Poll, pk=pk)
             if request.user.vote_set.filter(choice__poll=p).exists():
                 self.prev_choice = request.user.vote_set.filter(choice__poll=p)[0].choice
 
@@ -50,6 +51,7 @@ class ResultsView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super(ResultsView, self).get_context_data(**kwargs)
         context.update({'prev_choice': self.prev_choice})
+        context.update({'vote_counts': self.vote_counts})
         return context
 
 

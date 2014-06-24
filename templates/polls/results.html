@@ -1,4 +1,5 @@
 {% extends 'polls/base.html' %}
+{% load static %}
 
 {% block body_block %}
     <h1>{{ poll.question }}</h1>
@@ -14,4 +15,58 @@
     </ul>
 
     <a href={% url 'polls:index' %}>Back to index</a>
+
+    <script src={% static 'js/jquery-2.1.1.js' %}></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="http://code.highcharts.com/modules/exporting.js"></script>
+
+    <div id="container" style="min-width: 310px; height: 400px; max-width: 600px; margin: auto; position:relative; right:120px" class='container'></div>
+
+    <script type='text/javascript'>
+    $(function() {
+        var chart = new Highcharts.Chart({
+            chart: {
+                renderTo: 'container',
+                type: 'pie',
+            },
+
+            title: {
+                text: "Results of '{{ poll.question }}'"
+            },
+
+            plotOptions: {
+                pie: {
+                    borderColor: '#000000',
+                    innerSize: '50%'
+                }
+            },
+
+            series: [{
+                data: [
+                    {% for k, v in vote_counts.items %}
+                        {% if v != 0 %}
+                            ['{{ k }}', {{ v }}],
+                        {% endif %}
+                    {% endfor %}
+                    ]}]
+        },
+        // using
+
+        function(chart) { // on complete
+
+            var xpos = '50%';
+            var ypos = '50%';
+            var circleradius = 100;
+
+        // Render the circle
+        chart.renderer.circle(xpos, ypos, circleradius).attr({
+            fill: '#FFFFFF',
+        }).add();
+        });
+    });
+    </script>
+
+    </div>
+
+
 {% endblock %}
