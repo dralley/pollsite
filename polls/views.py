@@ -133,6 +133,11 @@ def register(request):
             user = user_form.save()
             user.set_password(user.password)
             user.save()
+            user = authenticate(username=request.POST['username'], password=request.POST['password'])
+
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
             return redirect(reverse('polls:index'))
         else:
             print user_form.errors
