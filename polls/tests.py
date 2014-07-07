@@ -146,3 +146,24 @@ class PollViewsTests(django_webtest.WebTest):
         resp = form.submit()
 
         self.assertEqual(resp.status_code, 200)
+
+    def test_create_new_poll(self):
+        user = User.objects.get(username='test_user')
+
+        form = self.app.get('/polls/new_poll/', user=user).form
+        form['question'] = 'test_question'
+        form['choice1'] = 'test_choice1'
+        form['choice2'] = 'test_choice2'
+        resp = form.submit()
+
+        self.assertEqual(resp.status_code, 302)
+        self.assertEqual(resp['location'], 'http://testserver/polls/4/')
+
+        new_poll = Poll.objects.get(pk=4)
+        self.assertTrue(new_poll is not None)
+        self.assertEqual(new_poll.question, 'test_question')
+
+        choices = new_poll.choice_set.all()
+        self.assertEqual(choices[0].choice_text, 'test_choice1')
+        self.assertEqual(choices[1].choice_text, 'test_choice2')
+

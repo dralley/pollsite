@@ -54,12 +54,6 @@ class ResultsView(generic.DetailView):
         context.update({'vote_counts': self.vote_counts})
         return context
 
-
-class ProfileView(generic.DetailView):
-    model = User
-    template_name = 'polls/profile.html'
-
-
 class CreatePoll(generic.CreateView):
     model = Poll
     template_name = 'polls/create_poll.html'
