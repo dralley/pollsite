@@ -1,0 +1,145 @@
+[
+{
+    "pk": 1, 
+    "model": "polls.choice", 
+    "fields": {
+        "choice_text": "42", 
+        "poll": 1
+    }
+},
+{
+    "pk": 2, 
+    "model": "polls.choice", 
+    "fields": {
+        "choice_text": "An african or european swallow?", 
+        "poll": 1
+    }
+},
+{
+    "pk": 3, 
+    "model": "polls.choice", 
+    "fields": {
+        "choice_text": "Cheese", 
+        "poll": 2
+    }
+},
+{
+    "pk": 4, 
+    "model": "polls.choice", 
+    "fields": {
+        "choice_text": "Mushroom", 
+        "poll": 2
+    }
+},
+{
+    "pk": 5, 
+    "model": "polls.choice", 
+    "fields": {
+        "choice_text": "Pepperoni", 
+        "poll": 2
+    }
+},
+{
+    "pk": 6, 
+    "model": "polls.choice", 
+    "fields": {
+        "choice_text": "Sausage", 
+        "poll": 2
+    }
+},
+{
+    "pk": 7, 
+    "model": "polls.choice", 
+    "fields": {
+        "choice_text": "Batman Begins", 
+        "poll": 3
+    }
+},
+{
+    "pk": 8, 
+    "model": "polls.choice", 
+    "fields": {
+        "choice_text": "The Dark Knight", 
+        "poll": 3
+    }
+},
+{
+    "pk": 9, 
+    "model": "polls.choice", 
+    "fields": {
+        "choice_text": "The Dark Knight Rises", 
+        "poll": 3
+    }
+},
+{
+    "pk": 1, 
+    "model": "auth.user", 
+    "fields": {
+        "username": "dralley", 
+        "first_name": "", 
+        "last_name": "", 
+        "is_active": true, 
+        "is_superuser": true, 
+        "is_staff": true, 
+        "last_login": "2014-07-07T17:30:11.145Z", 
+        "groups": [], 
+        "user_permissions": [], 
+        "password": "pbkdf2_sha256$12000$3cmobGtKNRwL$Go6Yaxy1xGuZqq6oKd4XJfrsK/8jb8vI8PTE0s5qpKA=", 
+        "email": "dralley@ncsu.edu", 
+        "date_joined": "2014-07-02T19:17:52.208Z"
+    }
+},
+{
+    "pk": 2, 
+    "model": "auth.user", 
+    "fields": {
+        "username": "test_user", 
+        "first_name": "", 
+        "last_name": "", 
+        "is_active": true, 
+        "is_superuser": false, 
+        "is_staff": false, 
+        "last_login": "2014-07-07T17:31:50.093Z", 
+        "groups": [], 
+        "user_permissions": [], 
+        "password": "pbkdf2_sha256$12000$Zj25G7M7PqJG$h5j8XYsRdCyoYG5miWv2tZGrcKhYVyc0guE/n+dIPDo=", 
+        "email": "", 
+        "date_joined": "2014-07-07T17:30:53Z"
+    }
+},
+{
+    "pk": 1, 
+    "model": "polls.vote", 
+    "fields": {
+        "user": 1, 
+        "choice": 8
+    }
+},
+{
+    "pk": 1, 
+    "model": "polls.poll", 
+    "fields": {
+        "pub_date": "2014-07-02T19:18:55.452Z", 
+        "question": "What is the airspeed of an unladen swallow?", 
+        "author": 1
+    }
+},
+{
+    "pk": 2, 
+    "model": "polls.poll", 
+    "fields": {
+        "pub_date": "2014-07-02T20:00:53.622Z", 
+        "question": "What is the best kind of pizza?", 
+        "author": 1
+    }
+},
+{
+    "pk": 3, 
+    "model": "polls.poll", 
+    "fields": {
+        "pub_date": "2014-07-02T20:01:35.914Z", 
+        "question": "Which is the best Batman movie?", 
+        "author": 1
+    }
+}
+]
